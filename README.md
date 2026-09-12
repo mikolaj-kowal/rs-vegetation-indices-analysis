@@ -1,4 +1,4 @@
-# Porównawcza analiza wskaźników roślinności z wykorzystaniem danych Sentinel-2
+# Analiza porównawcza wskaźników roślinności z wykorzystaniem danych Sentinel-2
 
 _Zastrzeżenie: Projekt edukacyjny mający na celu praktyczne zastosowanie wiedzy zdobytej w zakresie teledetekcji satelitarnej oraz podstaw przetwarzania i analizy danych przestrzennych._
 

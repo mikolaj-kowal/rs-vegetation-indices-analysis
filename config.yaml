@@ -1,0 +1,35 @@
+# Sentinel-2 download settings
+
+# collection
+collection: "sentinel-2-l2a"
+
+# area of interest
+aoi: "data/aoi.geojson"
+
+# date range
+date_from: "2026-07-01"
+date_to: "2026-07-31"
+
+# maximum acceptable cloud cover (%)
+max_cloud_cover: 20
+
+# Sentinel-2 bands to download
+bands:
+  - B01
+  - B02
+  - B03
+  - B04
+  - B05
+  - B06
+  - B07
+  - B08
+  - B8A
+  - B09
+  - B11
+  - B12
+
+# data directory
+data_dir: "data"
+
+# output directory
+output_dir: "outputs"
