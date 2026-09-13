@@ -4,10 +4,10 @@ import requests
 import yaml
 import zipfile
 
-
 from dotenv import load_dotenv
 from pathlib import Path
 from pystac_client import Client
+from shapely.geometry import shape
 
 load_dotenv()
 
@@ -43,9 +43,35 @@ items = list(search.items())
 if not items:
     raise RuntimeError("No Sentinel-2 L2A scenes found.")
 
-# select scene with lowest cloud cover
-items.sort(key=lambda item: item.properties.get("eo:cloud_cover", 100))
-scene = items[0]
+# check scene coverage of the AOI
+aoi_projected = aoi.to_crs("EPSG:32634")
+aoi_geom = aoi_projected.geometry.union_all()
+
+results = []
+
+for item in items:
+    scene = gpd.GeoSeries(
+        [shape(item.geometry)],
+        crs="EPSG:4326"
+    ).to_crs(aoi_projected.crs).iloc[0]
+
+    intersection = scene.intersection(aoi_projected.geometry)
+    coverage = (intersection.area / aoi_geom.area * 100).iloc[0]
+
+    results.append({
+        "item": item,
+        "coverage": coverage,
+        "cloud_cover": item.properties.get("eo:cloud_cover", 100)
+    })
+
+# select scene with highest AOI coverage
+results.sort(key=lambda x: x["cloud_cover"], reverse=True)
+best_result = results[0]
+
+if best_result["coverage"] < 100:
+    print(f"WARNING: The scene does not fully cover the AOI area ({round(best_result["coverage"])}%)")
+
+scene = best_result["item"]
 
 # get access token
 username = os.getenv("CDSE_USERNAME")
@@ -144,6 +170,7 @@ to_extract = [
     "_SCL_20m.jp2",
 ]
 
+# extract bands from product ZIP file
 with zipfile.ZipFile(downloaded_product, "r") as z:
     for member in z.namelist():
         if member.endswith("/"):
