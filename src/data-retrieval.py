@@ -16,7 +16,7 @@ with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 output_dir = Path(config["output_dir"])
-data_dir = Path(config["data_dir"])
+data_dir_raw = Path(config["data_dir"] / "raw")
 
 date_from = config["date_from"]
 date_to = config["date_to"]
@@ -151,7 +151,7 @@ with open(downloaded_product, "wb") as f:
 print("Download complete.")
 
 # extract required bands
-scene_dir = data_dir / scene.id
+scene_dir = data_dir_raw / scene.id
 scene_dir.mkdir(parents=True, exist_ok=True)
 
 to_extract = [
