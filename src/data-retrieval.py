@@ -10,13 +10,14 @@ from pystac_client import Client
 from shapely.geometry import shape
 
 load_dotenv()
+os.chdir("..")
 
 # load configuration from config file
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 output_dir = Path(config["output_dir"])
-data_dir_raw = Path(config["data_dir"] / "raw")
+data_dir_raw = Path(config["data_dir"]) / "raw"
 
 date_from = config["date_from"]
 date_to = config["date_to"]
