@@ -29,7 +29,16 @@ bands:
   - B12
 
 # data directory
-data_dir: "data"
+data_path: "data"
+
+# raw data directory
+raw_data_path: "data/raw"
+
+# processed data directory
+data_processed_path: "data/processed"
 
 # output directory
-output_dir: "outputs"
+output_path: "outputs"
+
+# indices directory
+indices_path: "outputs/indices"
