@@ -1,3 +1,4 @@
 .ipynb_checkpoints
 .env
 data/processed/*.tif
+outputs/indices/*.tif
