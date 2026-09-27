@@ -20,14 +20,13 @@ W tym projekcie porównuję różne wskaźniki roślinności obliczone na podsta
 <div align="center">
 <em>Tabela 1. Charakterystyka pasm spektralnych satelitów Sentinel-2</em>
 <table border="1">
-  <thead>
-    <tr style="text-align: left;">
+  <thead style="text-align: center;">
+    <tr>
       <th></th>
-      <th>Sentinel-2A</th>
-      <th></th>
-      <th>Sentinel-2B</th>
+      <th colspan="2">Sentinel-2A</th>
+      <th colspan="2">Sentinel-2B</th>
     </tr>
-    <tr style="text-align: left;">
+    <tr>
       <th>Band Number</th>
       <th>Central wavelength (nm)</th>
       <th>Bandwidth (nm)</th>
@@ -36,7 +35,7 @@ W tym projekcie porównuję różne wskaźniki roślinności obliczone na podsta
       <th>Spatial resolution (m)</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody style="text-align: center;">
     <tr>
       <td>1</td>
       <td>442.7</td>
@@ -146,3 +145,85 @@ W tym projekcie porównuję różne wskaźniki roślinności obliczone na podsta
 <em style="font-size: 0.85em;">Źródło: https://www.earthdata.nasa.gov/data/instruments/sentinel-2-msi</em>
 </div>
 
+<br>
+<div align="center">
+<em>Tabela 2. Statystyki opisowe indeksów wegetacyjnych obliczonych na podstawie zobrazowania Sentinel-2</em>
+<table border="1" class="dataframe" style="width: 100%;">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>Mean</th>
+      <th>Std</th>
+      <th>Min</th>
+      <th>P5</th>
+      <th>P25</th>
+      <th>P50 (Median)</th>
+      <th>P75</th>
+      <th>P95</th>
+      <th>Max</th>
+    </tr>
+  </thead>
+  <tbody style="text-align: center;">
+    <tr>
+      <th>NDVI</th>
+      <td>0.39</td>
+      <td>0.16</td>
+      <td>-0.28</td>
+      <td>0.06</td>
+      <td>0.29</td>
+      <td>0.43</td>
+      <td>0.51</td>
+      <td>0.61</td>
+      <td>0.71</td>
+    </tr>
+    <tr>
+      <th>EVI</th>
+      <td>0.42</td>
+      <td>0.20</td>
+      <td>-4.87</td>
+      <td>0.06</td>
+      <td>0.27</td>
+      <td>0.43</td>
+      <td>0.57</td>
+      <td>0.73</td>
+      <td>3.96</td>
+    </tr>
+    <tr>
+      <th>SAVI</th>
+      <td>0.31</td>
+      <td>0.14</td>
+      <td>-0.20</td>
+      <td>0.05</td>
+      <td>0.21</td>
+      <td>0.32</td>
+      <td>0.41</td>
+      <td>0.51</td>
+      <td>0.68</td>
+    </tr>
+    <tr>
+      <th>GNDVI</th>
+      <td>0.37</td>
+      <td>0.13</td>
+      <td>-0.36</td>
+      <td>0.12</td>
+      <td>0.30</td>
+      <td>0.39</td>
+      <td>0.46</td>
+      <td>0.55</td>
+      <td>0.84</td>
+    </tr>
+    <tr>
+      <th>NDRE</th>
+      <td>0.28</td>
+      <td>0.12</td>
+      <td>-0.30</td>
+      <td>0.04</td>
+      <td>0.21</td>
+      <td>0.29</td>
+      <td>0.36</td>
+      <td>0.46</td>
+      <td>0.59</td>
+    </tr>
+  </tbody>
+</table>
+</div>
