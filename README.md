@@ -146,6 +146,13 @@ W tym projekcie porównuję różne wskaźniki roślinności obliczone na podsta
 </div>
 
 <br>
+<p align="center">
+  <img src="outputs/true_color.jpg" width="700"><br>
+  <em>Rysunek 1. Zobrazowanie analizowanego obszaru w naturalnych kolorach </em>
+</p>
+<br>
+
+<br>
 <div align="center">
 <em>Tabela 2. Statystyki opisowe indeksów wegetacyjnych obliczonych na podstawie zobrazowania Sentinel-2</em>
 <table border="1" class="dataframe" style="width: 100%;">
