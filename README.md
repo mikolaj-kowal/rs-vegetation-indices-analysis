@@ -148,9 +148,30 @@ W tym projekcie porównuję różne wskaźniki roślinności obliczone na podsta
 <br>
 <p align="center">
   <img src="outputs/true_color.jpg" width="700"><br>
-  <em>Rysunek 1. Zobrazowanie analizowanego obszaru w naturalnych kolorach </em>
+  <em>Rysunek 1. Zobrazowanie analizowanego obszaru w naturalnych barwach </em>
 </p>
 <br>
+
+Do obliczenia wartości omawianych wskaźników roślinności dla analizowanego obszaru wykorzystałem dane z poszczególnych pasm spektralnych Sentinel-2. Przed wykonaniem obliczeń zastosowałem maskę wykluczającą wybrane klasy pikseli, w tym piksele reprezentujące brak danych, piksele nasycone lub uszkodzone, cienie oraz zachmurzenie. Obecność takich pikseli w danych wejściowych mogłaby prowadzić do zniekształcenia wyników analiz. Do identyfikacji pikseli podlegających maskowaniu wykorzystałem warstwę [Scene Classification Layer (SCL)](https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-2/scene-classification/). Z obliczeń wykluczyłem następujące klasy pikseli:
+
+- 0 - No data – brak danych
+- 1 - Saturated/defective – piksele nasycone lub uszkodzone
+- 2	- Topographic casted shadows – cienie topograficzne
+- 3	- Cloud shadows – cienie chmur
+- 7	- Unclassified - piksele niesklasyfikowane
+- 8	- Cloud, medium probability - średnie prawdopodobieństwo wystąpienia chmur
+- 9	- Cloud, high probability - wysokie prawdopodobieństwo wystąpienia chmur
+- 10 - Thin cirrus - cienkie chmury typu cirrus
+
+Rysunek 2 przedstawia obraz analizowanego obszaru w naturalnych barwach po zastosowaniu maskowania.
+
+<br>
+<p align="center">
+  <img src="outputs/true_color_masked.jpg" width="700"><br>
+  <em>Rysunek 2. Zobrazowanie analizowanego obszaru w barwach naturalnych na podstawie danych Sentinel-2, z zastosowaniem warstwy SCL do maskowania wybranych klas pikseli. </em>
+</p>
+<br>
+
 
 <br>
 <div align="center">
@@ -187,13 +208,13 @@ W tym projekcie porównuję różne wskaźniki roślinności obliczone na podsta
       <th>EVI</th>
       <td>0.42</td>
       <td>0.20</td>
-      <td>-4.87</td>
+      <td>-0.30</td>
       <td>0.06</td>
-      <td>0.27</td>
-      <td>0.43</td>
+      <td>0.28</td>
+      <td>0.44</td>
       <td>0.57</td>
       <td>0.73</td>
-      <td>3.96</td>
+      <td>1.04</td>
     </tr>
     <tr>
       <th>SAVI</th>
@@ -233,4 +254,3 @@ W tym projekcie porównuję różne wskaźniki roślinności obliczone na podsta
     </tr>
   </tbody>
 </table>
-</div>
