@@ -42,3 +42,6 @@ output_path: "outputs"
 
 # indices directory
 indices_path: "outputs/indices"
+
+# docs directory
+docs_path: "docs"

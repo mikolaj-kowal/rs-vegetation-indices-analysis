@@ -2,7 +2,9 @@
 
 _Zastrzeżenie: Projekt edukacyjny mający na celu praktyczne zastosowanie wiedzy zdobytej w zakresie teledetekcji satelitarnej oraz podstaw przetwarzania i analizy danych przestrzennych._
 
-Wskaźniki roślinności (ang. vegetation indices) to wskaźniki teledetekcyjne obliczane na podstawie odbicia promieniowania w wybranych pasmach spektralnych, służące do oceny stanu i kondycji roślinności.
+## Cel projektu
+
+Wskaźniki roślinności (_ang. vegetation indices_) to wskaźniki teledetekcyjne obliczane na podstawie odbicia promieniowania w wybranych pasmach spektralnych, służące do oceny stanu i kondycji roślinności.
 
 W tym projekcie porównuję różne wskaźniki roślinności obliczone na podstawie tego samego zobrazowania satelitarnego Sentinel-2. Analizuję, w jaki sposób poszczególne wskaźniki charakteryzują roślinność oraz jak różnią się uzyskane rozkłady wartości.
 
@@ -145,6 +147,8 @@ W tym projekcie porównuję różne wskaźniki roślinności obliczone na podsta
 <em style="font-size: 0.85em;">Źródło: https://www.earthdata.nasa.gov/data/instruments/sentinel-2-msi</em>
 </div>
 
+## Dane wejściowe
+
 <br>
 <p align="center">
   <img src="outputs/true_color.jpg" width="700"><br>
@@ -152,7 +156,13 @@ W tym projekcie porównuję różne wskaźniki roślinności obliczone na podsta
 </p>
 <br>
 
-Do obliczenia wartości omawianych wskaźników roślinności dla analizowanego obszaru wykorzystałem dane z poszczególnych pasm spektralnych Sentinel-2. Przed wykonaniem obliczeń zastosowałem maskę wykluczającą wybrane klasy pikseli, w tym piksele reprezentujące brak danych, piksele nasycone lub uszkodzone, cienie oraz zachmurzenie. Obecność takich pikseli w danych wejściowych mogłaby prowadzić do zniekształcenia wyników analiz. Do identyfikacji pikseli podlegających maskowaniu wykorzystałem warstwę [Scene Classification Layer (SCL)](https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-2/scene-classification/). Z obliczeń wykluczyłem następujące klasy pikseli:
+Do obliczenia wartości omawianych wskaźników roślinności dla analizowanego obszaru wykorzystano dane z poszczególnych pasm spektralnych Sentinel-2.
+
+## Przygotowanie danych do analizy
+
+### Maskowanie pikseli
+
+Przed wykonaniem obliczeń zastosowałem maskę wykluczającą wybrane klasy pikseli, w tym piksele reprezentujące brak danych, piksele nasycone lub uszkodzone, cienie oraz zachmurzenie. Obecność takich pikseli w danych wejściowych mogłaby prowadzić do zniekształcenia wyników analiz. Do identyfikacji pikseli podlegających maskowaniu wykorzystałem warstwę [Scene Classification Layer (SCL)](https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-2/scene-classification/). Z obliczeń wykluczyłem następujące klasy pikseli:
 
 - 0 - No data – brak danych
 - 1 - Saturated/defective – piksele nasycone lub uszkodzone
@@ -172,6 +182,70 @@ Rysunek 2 przedstawia obraz analizowanego obszaru w naturalnych barwach po zasto
 </p>
 <br>
 
+### Obliczanie wskaźników spektralnych
+
+
+
+### Identyfikacja i usuwanie wartości odstających
+
+W przypadku wskaźnika EVI konieczne było przeprowadzenie analizy wartości odstających oraz usunięcie pojedynczych, skrajnych obserwacji, które mogłyby negatywnie wpływać na wyniki dalszych obliczeń.
+
+Po obliczeniu wskaźnika EVI dla obszaru zainteresowania (AOI) przeanalizowano podstawowe statystyki opisowe jego rozkładu:
+
+| Statystyka | Wartość |
+|:---|---:|
+| Minimum | -2.90 |
+| Q1 (pierwszy kwartyl) | 0.28 |
+| Mediana | 0.44 |
+| Q3 (trzeci kwartyl) | 0.57 |
+| Maksimum | 7.77 |
+
+W pierwszej kolejności podjęto próbę identyfikacji wartości odstających z wykorzystaniem metody opartej na rozstępie międzykwartylowym (IQR). Zgodnie z jej założeniami za wartości odstające uznaje się obserwacje znajdujące się poza przedziałem wyznaczonym przez Q1 − 1,5 × IQR oraz Q3 + 1,5 × IQR.
+
+Dla analizowanego zbioru danych otrzymano następujące wartości:
+
+| Parametr | Wartość |
+|:---|---:|
+| IQR | 0.30 |
+| Dolna granica (Lower bound) | -0.17 |
+| Górna granica (Upper bound) | 1.02 |
+| Liczba obserwacji poniżej dolnej granicy | 452 |
+| Liczba obserwacji powyżej górnej granicy | 7 |
+
+Zastosowanie tej metody wykazało znaczną asymetrię w liczbie obserwacji przekraczających wyznaczone granice. Szczególnie duża liczba wartości poniżej dolnej granicy (452 obserwacje) uniemożliwiała bezkrytyczne zastosowanie tego kryterium do identyfikacji obserwacji przeznaczonych do usunięcia. Mogłoby to bowiem prowadzić do eliminacji znacznej liczby potencjalnie prawidłowych wartości wskaźnika.
+
+W kolejnym kroku sprawdzono, czy występowanie skrajnych wartości EVI może być związane z wartościami mianownika wzoru wykorzystywanego do obliczania wskaźnika, bliskimi zeru. Takie wartości mogłyby prowadzić do uzyskiwania nienaturalnie wysokich lub niskich wartości wskaźnika. W tym celu sprawdzono, czy w zbiorze występują obserwacje, dla których wartość bezwzględna mianownika jest mniejsza niż przyjęty próg 0.05. Analiza nie wykazała występowania takich obserwacji.
+
+Ostateczną identyfikację wartości przeznaczonych do usunięcia przeprowadzono na podstawie wizualnej analizy rozkładu wskaźnika EVI. Na wykresie zidentyfikowano pojedyncze, wyraźnie odstające obserwacje: cztery po stronie najniższych oraz pięć po stronie najwyższych wartości. Ze względu na ich wyraźne oddzielenie od pozostałej części rozkładu zdecydowano o ich usunięciu z dalszej analizy.
+
+
+<br>
+<p align="center">
+  <img src="docs/excluding_outliers_boxplots.png" width="700"><br>
+  <em>Rysunek 3. Wykresy pudełkowe (boxplot) rozkładu wartości EVI przed usunięciem i po usunięciu wartości odstających. </em>
+</p>
+<br>
+
+Po usunięciu dziewięciu zidentyfikowanych obserwacji ponownie obliczono statystyki opisowe rozkładu wskaźnika EVI:
+
+| Statystyka | Wartość |
+|:---|---:|
+| Minimum | -0.30 |
+| Q1 (pierwszy kwartyl) | 0.28 |
+| Mediana | 0.44 |
+| Q3 (trzeci kwartyl) | 0.57 |
+| Maksimum | 1.04 |
+
+Porównanie histogramów przed usunięciem i po usunięciu wartości odstających przedstawiono na rysunku 4.
+
+<br>
+<p align="center">
+  <img src="docs/excluding_outliers_histograms.png" width="700"><br>
+  <em>Rysunek 4. Porównanie rozkładu wartości wskaźnika EVI przed usunięciem i po usunięciu wartości odstających. </em>
+</p>
+<br>
+
+Tak przygotowany zbiór danych wykorzystano w dalszych etapach analizy.
 
 <br>
 <div align="center">
