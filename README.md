@@ -160,6 +160,32 @@ Do obliczenia wartości omawianych wskaźników roślinności dla analizowanego 
 
 ## Przygotowanie danych do analizy
 
+### Skalowanie wartości do reflektancji powierzchniowej
+
+Wartości reflektancji w zobrazowaniach Sentinel-2 Level-2A, dostarczanych w formacie JPEG2000 (JP2) w strukturze produktu SAFE, są przechowywane jako liczby całkowite (DN, Digital Numbers). W celu uzyskania wartości reflektancji powierzchniowej (BOA, Bottom of Atmosphere) konieczne jest przeskalowanie wartości DN z uwzględnieniem współczynnika skalowania oraz offsetu radiometrycznego.
+
+Informacje niezbędne do przeprowadzenia tej operacji znajdują się w metadanych produktu zapisanych w pliku XML (MTD_MSIL2A.xml). Obejmują one m.in.:
+
+- BOA_ADD_OFFSET – offset radiometryczny, którego wartość może być określona indywidualnie dla każdego pasma spektralnego
+- BOA_QUANTIFICATION_VALUE – współczynnik kwantyzacji wykorzystywany do przeskalowania wartości DN
+
+W przypadku produktów przetworzonych z wykorzystaniem Processing Baseline (PB) 04.00 lub nowszego wartości reflektancji powierzchniowej oblicza się według następującego wzoru:
+
+$$BOA_i = \frac{DN_i + BOA\_ADD\_OFFSET_i}{BOA\_QUANTIFICATION\_VALUE}$$
+
+Dla produktów z tych wersji Processing Baseline typowe wartości parametrów wynoszą:
+
+- BOA_ADD_OFFSET = -1000 (dla wszystkich pasm spektralnych)
+- BOA_QUANTIFICATION_VALUE = 10000
+
+W związku z tym wzór można uprościć do postaci:
+
+$$BOA_i = \frac{DN_i - 1000}{10000}$$
+
+Przed przystąpieniem do przeskalowania wartości należy wykluczyć piksele oznaczone jako NODATA oraz piksele nasycone radiometrycznie (SATURATED). Informacje o ich lokalizacji są dostępne w odpowiednich maskach jakościowych produktu. W przypadku pikseli NODATA należy również uwzględnić zarezerwowaną wartość DN = 0.
+
+Uzyskane wartości reflektancji powierzchniowej wykorzystano w dalszych obliczeniach wskaźników spektralnych.
+
 ### Maskowanie pikseli
 
 Przed wykonaniem obliczeń zastosowałem maskę wykluczającą wybrane klasy pikseli, w tym piksele reprezentujące brak danych, piksele nasycone lub uszkodzone, cienie oraz zachmurzenie. Obecność takich pikseli w danych wejściowych mogłaby prowadzić do zniekształcenia wyników analiz. Do identyfikacji pikseli podlegających maskowaniu wykorzystałem warstwę [Scene Classification Layer (SCL)](https://custom-scripts.sentinel-hub.com/custom-scripts/sentinel-2/scene-classification/). Z obliczeń wykluczyłem następujące klasy pikseli:
