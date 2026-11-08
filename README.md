@@ -162,27 +162,27 @@ Do obliczenia wartości omawianych wskaźników roślinności dla analizowanego 
 
 ### Skalowanie wartości do reflektancji powierzchniowej
 
-Wartości reflektancji w zobrazowaniach Sentinel-2 Level-2A, dostarczanych w formacie JPEG2000 (JP2) w strukturze produktu SAFE, są przechowywane jako liczby całkowite (DN, Digital Numbers). W celu uzyskania wartości reflektancji powierzchniowej (BOA, Bottom of Atmosphere) konieczne jest przeskalowanie wartości DN z uwzględnieniem współczynnika skalowania oraz offsetu radiometrycznego.
+Wartości reflektancji w zobrazowaniach Sentinel-2 Level-2A, dostarczanych w formacie JPEG2000 (JP2) w strukturze produktu SAFE, są przechowywane jako liczby całkowite (DN, _Digital Numbers_). W celu uzyskania wartości reflektancji powierzchniowej (BOA, _Bottom of Atmosphere_) konieczne jest przeskalowanie wartości DN z uwzględnieniem współczynnika skalowania oraz offsetu radiometrycznego.
 
-Informacje niezbędne do przeprowadzenia tej operacji znajdują się w metadanych produktu zapisanych w pliku XML (MTD_MSIL2A.xml). Obejmują one m.in.:
+Informacje niezbędne do przeprowadzenia tej operacji znajdują się w metadanych produktu zapisanych w pliku XML (`MTD_MSIL2A.xml`). Obejmują one m.in.:
 
-- BOA_ADD_OFFSET – offset radiometryczny, którego wartość może być określona indywidualnie dla każdego pasma spektralnego
-- BOA_QUANTIFICATION_VALUE – współczynnik kwantyzacji wykorzystywany do przeskalowania wartości DN
+- `BOA_ADD_OFFSET` – offset radiometryczny, którego wartość może być określona indywidualnie dla każdego pasma spektralnego
+- `BOA_QUANTIFICATION_VALUE` – współczynnik kwantyzacji wykorzystywany do przeskalowania wartości DN
 
-W przypadku produktów przetworzonych z wykorzystaniem Processing Baseline (PB) 04.00 lub nowszego wartości reflektancji powierzchniowej oblicza się według następującego wzoru:
+W przypadku produktów przetworzonych z wykorzystaniem _Processing Baseline (PB)_ 04.00 lub nowszego wartości reflektancji powierzchniowej oblicza się według następującego wzoru:
 
 $$BOA_i = \frac{DN_i + BOA\_ADD\_OFFSET_i}{BOA\_QUANTIFICATION\_VALUE}$$
 
 Dla produktów z tych wersji Processing Baseline typowe wartości parametrów wynoszą:
 
-- BOA_ADD_OFFSET = -1000 (dla wszystkich pasm spektralnych)
-- BOA_QUANTIFICATION_VALUE = 10000
+- `BOA_ADD_OFFSET` = -1000 (dla wszystkich pasm spektralnych)
+- `BOA_QUANTIFICATION_VALUE` = 10000
 
 W związku z tym wzór można uprościć do postaci:
 
 $$BOA_i = \frac{DN_i - 1000}{10000}$$
 
-Przed przystąpieniem do przeskalowania wartości należy wykluczyć piksele oznaczone jako NODATA oraz piksele nasycone radiometrycznie (SATURATED). Informacje o ich lokalizacji są dostępne w odpowiednich maskach jakościowych produktu. W przypadku pikseli NODATA należy również uwzględnić zarezerwowaną wartość DN = 0.
+Przed przystąpieniem do przeskalowania wartości należy wykluczyć piksele oznaczone jako `NODATA` oraz piksele nasycone radiometrycznie (`SATURATED`). Informacje o ich lokalizacji są dostępne w odpowiednich maskach jakościowych produktu. W przypadku pikseli `NODATA` należy również uwzględnić zarezerwowaną wartość DN = 0.
 
 Uzyskane wartości reflektancji powierzchniowej wykorzystano w dalszych obliczeniach wskaźników spektralnych.
 
